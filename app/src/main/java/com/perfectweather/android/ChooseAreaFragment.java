@@ -2,6 +2,7 @@ package com.perfectweather.android;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.perfectweather.android.db.City;
 import com.perfectweather.android.db.County;
 import com.perfectweather.android.db.Province;
+import com.perfectweather.android.gson.Weather;
 import com.perfectweather.android.util.HttpUtil;
 import com.perfectweather.android.util.Utility;
 
@@ -94,6 +96,14 @@ public class ChooseAreaFragment extends Fragment{
                 }else if(currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(position);
                     queryCounties();
+                }else if(currentLevel == LEVEL_COUNTY){
+                    String weatherId = countyList.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra("weatherId",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
+
+
                 }
             }
         });
@@ -180,6 +190,7 @@ public class ChooseAreaFragment extends Fragment{
 
             @Override
             public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
